@@ -20,7 +20,7 @@
       Execute script.
 
   * Author: Gustav Landerholm
-  * Repository: GitHub > glan > reaper_scripts
+  * Repository: GitHub > gus-lan > reaper_scripts
   * Repository URL:https://github.com/gus-lan/reaper_scripts.git 
   * Licence: GPL v3
   * Version: 1.0
