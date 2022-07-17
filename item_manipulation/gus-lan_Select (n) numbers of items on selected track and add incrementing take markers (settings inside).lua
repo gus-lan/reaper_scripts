@@ -1,3 +1,12 @@
+--────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+--        ::::::::  :::    :::  ::::::::                :::            :::     ::::    :::          ::::::::   ::::::::  :::::::::  ::::::::::: ::::::::: ::::::::::: ::::::::  --
+--      :+:    :+: :+:    :+: :+:    :+:               :+:          :+: :+:   :+:+:   :+:         :+:    :+: :+:    :+: :+:    :+:     :+:     :+:    :+:    :+:    :+:    :+:  --
+--     +:+        +:+    +:+ +:+                      +:+         +:+   +:+  :+:+:+  +:+         +:+        +:+        +:+    +:+     +:+     +:+    +:+    +:+    +:+          --
+--    :#:        +#+    +:+ +#++:++#++  ++:++#++:++  +#+        +#++:++#++: +#+ +:+ +#+         +#++:++#++ +#+        +#++:++#:      +#+     +#++:++#+     +#+    +#++:++#++    --
+--   +#+   +#+# +#+    +#+        +#+               +#+        +#+     +#+ +#+  +#+#+#                +#+ +#+        +#+    +#+     +#+     +#+           +#+           +#+     --  
+--  #+#    #+# #+#    #+# #+#    #+#               #+#        #+#     #+# #+#   #+#+#         #+#    #+# #+#    #+# #+#    #+#     #+#     #+#           #+#    #+#    #+#      --
+--  ########   ########   ########                ########## ###     ### ###    ####          ########   ########  ###    ### ########### ###           ###     ########        --
+--────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 --[[
     Script Name: gus-lan_Select (n) numbers of items on selected track and add incrementing take markers (settings inside).lua
     Description: Selects n numbers of items on selected track and adds incrementing take markers. Useful for sfx library development.
@@ -10,6 +19,12 @@
 ]]--
 ------------------------------------------------------------------------------------------
 
+------ START USER SETTINGS ---------------------------------------------------------------
+
+    userinput_markerprefix = "version" --Change what the marker name should be
+
+------ END USER SETTINGS -----------------------------------------------------------------
+
 function main()
     GetTrack()
     
@@ -20,6 +35,8 @@ function main()
     end
 
     PositionItemOnSelectedTrack() --Print the position of the selected items on the selected track.
+
+    AddMarkerAtItemPositions() --Add markers at the start of items on the selected track.
 
 end
 
@@ -62,11 +79,26 @@ function PositionItemOnSelectedTrack()
     end
 end
 
------- INSERT TAKE MARKER AT STORED ITEM POSITION ----------------------------------------
+------ ADD MARKER AT ITEM START POSITION --------------------------------------------------
 
---function AddTakeMarkerAtItemPositions()
---    for 
---end
+function AddMarkerAtItemPositions()
+    for i = 0, item_count -1 do 
+        local sel_item = reaper.GetSelectedMediaItem(0,i) -- Get selected media item in loop.
+        local i_pos = reaper.GetMediaItemInfo_Value( sel_item, "D_POSITION" ) -- Get the position of current selected item in loop.
+
+        local j = i+1 -- convert 0 based to 1 based.
+
+        markernumber = tostring(j)
+        markerprefix = userinput_markerprefix
+        markername = markerprefix..markernumber
+        
+        idx = j
+
+        reaper.AddProjectMarker( 0, 0, i_pos, 0, markername , idx  )
+    end
+end
+
+
 ------ END OF FUNCTIONS ------------------------------------------------------------------
 main()
 
